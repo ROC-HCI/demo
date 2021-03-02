@@ -8,8 +8,8 @@ class task_finish extends Component {
             <div>
                 <h1>TASK FINISH PAGE</h1>
                 <Button color='inherit' component={Link} to="/results_buffer">
-    To Results Loading
-  </Button>
+                    To Results Loading
+                </Button>
             </div>
         )
     }

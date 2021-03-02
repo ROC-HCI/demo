@@ -8,8 +8,8 @@ class task_record extends Component {
             <div>
                 <h1>TASK RECORD PAGE</h1>
                 <Button color='inherit' component={Link} to="/task_finish">
-    To Task Finish
-  </Button>
+                    To Task Finish
+                </Button>
             </div>
         )
     }
