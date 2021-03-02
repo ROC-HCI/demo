@@ -149,7 +149,7 @@ function CamRec(props) {
             );
         });
 
-        if (taskCount == 2) {
+        if (taskCount == 3) {
             setShowFeedback(true);
         }
     };
@@ -175,14 +175,14 @@ function CamRec(props) {
             <Button className="m-2" color="warning">
                 <NavLink
                     to={{
-                        pathname: "/feedback",
+                        pathname: "/results_buffer",
                         state: {
                             src: "from CamRec page",
                             url: videoLocation,
                         },
                     }}
                 >
-                    Show Feedback
+                    Show Results
                 </NavLink>
             </Button>
         );
