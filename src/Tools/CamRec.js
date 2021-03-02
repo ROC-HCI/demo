@@ -1,6 +1,6 @@
+import firebase from "firebase/app";
 import React, { useRef, useState, useEffect } from "react";
 import RecordRTC from "recordrtc";
-import firebase from "firebase/app";
 import { NavLink } from "react-router-dom";
 import "firebase/storage";
 import { Container, Button } from "reactstrap";

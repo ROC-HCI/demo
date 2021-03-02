@@ -18,7 +18,6 @@ import CamRec from "../Tools/CamRec";
 //     }
 // }
 
-
 function Task_tutorial(props){
     const [count, setCount] = useState(1);
     const [complete, setComplete] = useState(false);
@@ -26,7 +25,7 @@ function Task_tutorial(props){
     const taskName = "Task" + count;
     let Player;
     if (complete) {
-        // Player = <CamRec taskCount={count} />;
+        Player = <CamRec taskCount={count} />;
     } else if (count == 1) {
         Player = <ReactPlayer url="https://youtu.be/YbqR1kH_9YM" />;
     } else if (count == 2) {
@@ -62,7 +61,7 @@ function Task_tutorial(props){
         <Container className="" fluid={true}>
             <div className="d-flex align-items-center flex-column">
                 <h1 className="m-4">{taskName}</h1>
-                {/* {Player} */}
+                {Player}
                 {buttonElement}
             </div>
         </Container>
