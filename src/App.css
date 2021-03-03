@@ -59,3 +59,45 @@ button, select {
 button, input {
   overflow: visible;
 }
+
+.m-4 {
+  margin: 1.5rem!important;
+}
+.btn-success {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.m-4 {
+  margin: 1.5rem!important;
+}
+.btn-secondary {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+  background-color: transparent;
+}
+*, ::after, ::before {
+  box-sizing: border-box;
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.m-2 {
+  margin: .5rem!important;
+}
+.btn-warning {
+  color: #212529;
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
