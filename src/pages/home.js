@@ -14,25 +14,26 @@ class home extends Component {
         };
         return (
             
-            <div style={{ display: 'flex', backgroundColor: 'white', height: '20vh', flexDirection: 'column' }}>
-                <div style={{ textAlign: 'left', flexDirection: 'row' }}>
-                    <h1 style={{ color: '#0261FF', fontSize: '8vh' }} > PARK
-                    <Button style={{ color: '#0261FF', component: { Link }, to: "/home", fontSize: '2vh' }}>
+            <div style={{ display: 'flex', backgroundColor: 'white', flexDirection: 'column' }}>
+                <div style={{ flexDirection: 'row' }}>
+                    <h1 style={{ textAlign: 'left', float: 'left', color: '#0261FF', fontSize: '6vh' }} > PARK </h1>
+                    <h2 style={{ textAlign: 'center', float: 'center' }}>
+                    <Button style={{ color: '#0261FF', component: { Link }, to: "/home", fontSize: '3vh'}}>
                             <b>Home</b>
                         </Button>
-                        <Button style={{ color: '#0261FF', component: { Link }, to: "/About", fontSize: '2vh' }}>
+                        <Button style={{ color: '#0261FF', component: { Link }, to: "/About", fontSize: '3vh' }}>
                             <b>About</b>
                         </Button>
-                        <Button style={{ color: '#0261FF', component: { Link }, to: "/FAQ", fontSize: '2vh' }}>
+                        <Button style={{ color: '#0261FF', component: { Link }, to: "/FAQ", fontSize: '3vh' }}>
                             <b>FAQ</b>
                         </Button>
-                        <Button style={{ color: '#0261FF', component: { Link }, to: "/Contact", fontSize: '2vh' }}>
+                        <Button style={{ color: '#0261FF', component: { Link }, to: "/Contact", fontSize: '3vh' }}>
                             <b>Contact</b>
-                        </Button>  </h1></div>
-
+                        </Button>  </h2>
+                        </div>
                 <div style={{ display: 'flex', flexDirection: 'column', height: '90vh', background: 'linear-gradient(to right, #0161FC, #529E36)' }} >
-                    <h2 style={{ color: 'white', fontSize: '5.5vh' }}> The PARK system enables  <br /> the measurement of  <br /> Parkinson's disease for <br />
-                        <em>anyone, anywhere -</em> <br />- via webcam</h2>
+                    <h3 style ={{ color: 'white', fontSize: '5.5vh'}}> The PARK system enables  <br /> the measurement of  <br /> Parkinson's disease for <br />
+                        <em>anyone, anywhere -</em> <br />- via webcam</h3>
                     <br></br>
                     <div style = {{display: 'flex', flexDirection: 'row'}}>
                     <div style = {{display: 'flex', flexDirection: 'column'}}>
@@ -42,13 +43,12 @@ class home extends Component {
                   </button>
                     <br />
                     <br />
-                    
-                    <h3 style = {{color: 'white'}}>
+                    <h4 style = {{color: 'white'}}>
                         We ask that only those with Parkinson's
                         complete the study at this time.
-                     </h3>
+                     </h4>
                     </div>
-                    <h4 style = {{alignitems: 'right'}}><img className= "photo" src={ParkHomepageImage}></img></h4>
+                    <h5 style = {{alignitems: 'right'}}><img className= "photo" src={ParkHomepageImage}></img></h5>
                 </div>
                 </div>
                 <div>
