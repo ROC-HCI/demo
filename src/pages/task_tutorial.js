@@ -12,14 +12,21 @@ function Task_tutorial(props) {
     if (complete) {
         Player = <CamRec taskCount={count} />;
     } else if (count == 1) {
-        Player = <div className = "video"><ReactPlayer className="react-player" url="https://youtu.be/YbqR1kH_9YM" /></div>;
+        Player = <div className = "video"><ReactPlayer className="react-player" url="https://youtu.be/uRjPKH_SgAM" /></div>;
     } else if (count == 2) {
-        Player = <ReactPlayer url="https://youtu.be/eG2vrNFcpRM" />;
+        Player = <ReactPlayer url="https://youtu.be/kL757TueRVE" />; 
+        // Quick brown fox
     } else if (count == 3) {
-        Player = <ReactPlayer url="https://youtu.be/eGSug9VdR78" />;
+        Player = <ReactPlayer url="https://youtu.be/xjsbZp3DrlQ" />;
     } else {
-        Player = <ReactPlayer url="https://youtu.be/C2GSwTR2Fts" />;
+        Player = <ReactPlayer url="https://youtu.be/eG2vrNFcpRM" />;
     }
+
+// old urls
+// https://youtu.be/YbqR1kH_9YM
+// https://youtu.be/eG2vrNFcpRM
+// https://youtu.be/eGSug9VdR78
+// https://youtu.be/C2GSwTR2Fts
 
     const toggle = () => {
         setComplete(!complete);
@@ -37,7 +44,7 @@ function Task_tutorial(props) {
         </Button>
     );
 
-    if (count == 3 && complete) {
+    if (count == 4 && complete) {
         console.log("inside this");
         buttonElement = <> </>;
     }

@@ -149,7 +149,7 @@ function CamRec(props) {
             );
         });
 
-        if (taskCount == 3) {
+        if (taskCount == 4) {
             setShowFeedback(true);
         }
     };

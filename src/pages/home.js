@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Button from '@material-ui/core/Button'
 import Link from 'react-router-dom/Link'
 import Lottie from 'react-lottie'
-import "./home.css";
+import "../home.css";
 import ParkHomepageImage from "./ParkHomepageImage.png"
 
 class home extends Component {
