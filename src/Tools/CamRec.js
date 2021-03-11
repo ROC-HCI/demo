@@ -139,7 +139,7 @@ function CamRec(props) {
                     //     });
 
                     const url = new URL(
-                        storageRef.child("videos/" + fileObject.name)
+                        storageRef.child("/task" + fileObject.name)
                     );
 
                     const currentVideoLocation = url.toString();
