@@ -107,7 +107,7 @@ function CamRec(props) {
             // now upload file to firebase bucket
             // Upload file and metadata to the object 'images/mountains.jpg'
             var uploadTask = storageRef
-                .child("/test" + fileObject.name)
+                .child("test/" + fileObject.name)
                 .put(fileObject);
 
             // Listen for state changes, errors, and completion of the upload.
@@ -138,6 +138,7 @@ function CamRec(props) {
                     //         console.log("File available at", downloadURL);
                     //     });
 
+                    // TODO: implement fetching url from storage
                     const url = new URL(
                         storageRef.child("/test" + fileObject.name)
                     );
