@@ -31,7 +31,7 @@ function CamRec(props) {
     //global states
     const [recordVideo, setRecordVideo] = useState(null);
     const [showFeedback, setShowFeedback] = useState(false);
-    const [videoLocation, setVideoLocation] = useState([]);
+    const [videoLocation, setVideoLocation] = useState([...'gs://..../test/1.webm', 'gs://..../test/2.webm', 'gs://..../test/3.webm', 'gs://..../test/4.webm']);
     const [started, SetStarted] = useState(false);
 
     //global variables
@@ -130,15 +130,15 @@ function CamRec(props) {
                 (error) => {
                     //print error
                 },
-                () => {
-                    const url = new URL(
-                        storageRef.child("/test" + fileObject.name)
-                    );
+                // () => {
+                //     const url = new URL(
+                //         storageRef.child("/test" + fileObject.name)
+                //     );
 
-                    const currentVideoLocation = url.toString();
+                //     const currentVideoLocation = url.toString();
 
-                    setVideoLocation([...videoLocation, currentVideoLocation]);
-                }
+                //     // setVideoLocation([...'gs://..../test/1.webm', 'gs://..../test/2.webm', 'gs://..../test/3.webm', 'gs://..../test/4.webm']);
+                // }
             );
         });
 
@@ -171,7 +171,7 @@ function CamRec(props) {
                         pathname: "/results_buffer",
                         state: {
                             src: "from CamRec page",
-                            url: videoLocation,
+                            // url: videoLocation,
                         },
                     }}
                 >

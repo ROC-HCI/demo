@@ -10,7 +10,7 @@ function Feedback() {
     const [displayInference, setDisplayInference] = useState(false);
 
     let location = useLocation();
-    let videoLocation = location.state.url;
+    let videoLocation = [...'gs://..../test/1.webm', 'gs://..../test/2.webm', 'gs://..../test/3.webm', 'gs://..../test/4.webm'];
     var feedback = (
         <Container className="my-4">
             <h4>Waiting for Feedback ...</h4>
