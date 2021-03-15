@@ -31,7 +31,7 @@ function CamRec(props) {
     //global states
     const [recordVideo, setRecordVideo] = useState(null);
     const [showFeedback, setShowFeedback] = useState(false);
-    const [videoLocation, setVideoLocation] = useState("Initial Location");
+    const [videoLocation, setVideoLocation] = useState([]);
     const [started, SetStarted] = useState(false);
 
     //global variables
@@ -145,7 +145,7 @@ function CamRec(props) {
 
                     const currentVideoLocation = url.toString();
 
-                    setVideoLocation(currentVideoLocation);
+                    setVideoLocation([...videolocation, currentVideoLocation]);
                 }
             );
         });

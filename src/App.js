@@ -8,7 +8,7 @@ import results_buffer from './pages/results_buffer';
 import task_tutorial from './pages/task_tutorial';
 import task_record from './pages/task_record';
 import task_finish from './pages/task_finish';
-
+import Feedback from './pages/Feedback.js';
 
 function App() {
   return (
@@ -21,6 +21,7 @@ function App() {
           <Route exact path="/task_tutorial" component={task_tutorial} />
           <Route exact path="/task_record" component={task_record} />
           <Route exact path="/task_finish" component={task_finish} />
+          <Route exact path="/feedback" component={Feedback} />
         </Switch>
       </Router>
     </div>

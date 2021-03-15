@@ -29,9 +29,7 @@ function Feedback() {
     );
 
     const audioURL = "https://audio-pipeline-bsniz3romq-ue.a.run.app/fox";
-    const inferenceURL = "https://inference-bsniz3romq-ue.a.run.app";
-    const plotURL = "https://inference-bsniz3romq-ue.a.run.app/plot";
-    const proxyURL = "https://cors-anywhere.herokuapp.com/";
+    const inferenceURL = "https://inference-bsniz3romq-ue.a.run.app/mimic";
     const post1URL = audioURL;
     const post2URL = inferenceURL;
     const post3URL = plotURL;
