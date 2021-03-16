@@ -16,7 +16,7 @@ class home extends Component {
             
             <div style={{ display: 'flex', backgroundColor: 'white', flexDirection: 'column' }}>
                 <div style={{ flexDirection: 'row' }}>
-                    <h1 style={{ textAlign: 'left', float: 'left', color: '#0261FF', fontSize: '6vh' }} > PARK </h1>
+                    <h1 style={{ textAlign: 'center', float: 'left', color: '#0261FF', fontSize: '6vh', }} > PARK </h1>
                     <h2 style={{ textAlign: 'center', float: 'center' }}>
                     <Button style={{ color: '#0261FF', component: { Link }, to: "/home", fontSize: '3vh'}}>
                             <b>Home</b>

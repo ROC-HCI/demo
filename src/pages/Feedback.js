@@ -58,9 +58,15 @@ function Feedback() {
     const post3URL = videoURL;
     const post4URL = inferenceAudioURL;
 
-    useEffect(() => {
-        getFeedback();
+    useEffect(async () => {
+        await getFeedback();
     }, []);
+
+    useEffect(async () => {
+        if (!(feature1 == null || feature2 == null || feature3 == null || feature4 == null)) {
+            await getInference();
+        }
+    }, [feature1, feature2, feature3, feature4]);
 
     async function getFeedback() {
         var face_data = JSON.stringify({"uri":videoLocation.slice(0, 3),"use_fast":true});
@@ -113,13 +119,11 @@ function Feedback() {
                 console.log(response.data.features);
                 //setFeatures(response.data.features); //TODO: Object is not a react child error
                 setFeature4(response.data.features);
-                setDisplay(true);
             })
             .catch((error) => {
                 console.error("There was an error in 1st post!", error);
             });
-        await delay(5000);
-        getInference();
+
 
     }
 
@@ -181,11 +185,12 @@ function Feedback() {
 
         feedback = (<div style = {{display: 'flex', flexDirection: 'column', backgroundColor: 'white', height:'100vh'}}>
         <div style = {{textAlign: 'center'}}>
-        <h1 style = {{color: 'gray'}}>YOUR RESULTS ARE LOADING</h1></div>
+        <h1 style = {{color: 'black'}}>YOUR RESULTS ARE LOADING</h1></div>
         <Lottie 
             options = {defaultOptions}
             height = {400}
             width = {400} 
+            style = {{fill: 'red', stroke: 'black'}}
             />
         </div>);
     }
@@ -193,8 +198,9 @@ function Feedback() {
 
     if(showFeedback) {
         let prediction = inference2.prediction[0];
-        let confidence = inference2.confidence[0] * 100;
+        let confidence = inference2.confidence[0][0] * 100;
         let shap = inference2.shap[0];
+        confidence = Math.floor(confidence);
 
         console.log("CONFIDENCE");
         console.log(confidence);
@@ -204,8 +210,7 @@ function Feedback() {
         console.log(inference2);
 
 
-        setTimeout('', 3000);
-          let handleOpenMoreFace = () => {
+        let handleOpenMoreFace = () => {
             setMoreFace(true);
           };
           let handleCloseMoreFace = () => {
@@ -233,7 +238,7 @@ function Feedback() {
             setExplainSpeech(false);
           };
         
-          const COLORS = ['white','#00205b'];
+          const COLORS = ['white','#003b71'];
           const face_data = [{"name":"face","value":confidence-8}]
           const speech_data = [{"name":"speech","value":confidence}]
           const overall_data = [
@@ -249,7 +254,7 @@ function Feedback() {
 
         feedback = <div>
         <div>
-            <h1 style={{textAlign: 'center'}}>YOUR RESULTS</h1>
+            <h1 style={{textAlign: 'center', marginLeft: '60px'}}>YOUR RESULTS <p1 style={{fontSize: 14, color: 'red'}}>[rough sketch]</p1></h1>
         </div>
         <div id="cards" style={{display: 'flex', flexDirection: 'row', margin: 'auto', width: '60%'}}>
             <div id="main_score" style={{ width: '18rem', 
@@ -263,8 +268,9 @@ function Feedback() {
                 >
                         <h2>OVERALL </h2>
                         <p1>
-                            Some quick example text to build on the card title and make up the bulk of
-                            the card's content.
+                            {prediction === 0 ? "Initial analyzes show that you DO NOT have Parkinson's Disease. Please keep in mind this is not an official medical Diagnosis" 
+                             : "Initial analyzes show that you may have Parkinson's Disease. Please keep in mind this is not an official medical Diagnosis. We reccomend you seek professional opinion"    
+                            }
                         </p1>
                         <PieChart width={250} height={250}>
                         <text style={{fontSize: '2rem',
@@ -274,7 +280,7 @@ function Feedback() {
                             textAnchor="middle" 
                             dominantBaseline="middle" 
                             scaleToFit='true'>
-                            {confidence}
+                            {String(confidence)+"/100"}
                         </text>
                         <Pie
                             data={overall_data}
@@ -318,10 +324,10 @@ function Feedback() {
         />
         <Bar 
             dataKey="value" 
-            fill="#00205b"
+            fill="#003b71"
         /> 
     </BarChart>
-    <Button variant="contained" size='small' style= {{backgroundColor: "#00205b", color: 'white', marginRight: '10px', marginTop: '10px'}} onClick={handleOpenMoreFace}>
+    <Button variant="contained" size='small' style= {{backgroundColor: "#003b71", color: 'white', marginRight: '10px', marginTop: '10px'}} onClick={handleOpenMoreFace}>
 more info +
 </Button>
 
@@ -339,8 +345,8 @@ more info +
             </DialogActions>
           </Dialog>
 
-<Button variant="contained" size='small' style= {{backgroundColor: "#00205b", color: 'white', marginLeft: '65px', marginTop: '10px'}} onClick={handleOpenExplainFace}>
-Explain
+<Button variant="contained" size='small' style= {{backgroundColor: "#003b71", color: 'white', marginLeft: '65px', marginTop: '10px'}} onClick={handleOpenExplainFace}>
+explain
 </Button>
 
         <Dialog
@@ -385,10 +391,10 @@ Explain
         />
         <Bar 
             dataKey="value" 
-            fill="#00205b"
+            fill="#003b71"
         /> 
     </BarChart>
-    <Button variant="contained" size='small' style= {{backgroundColor: "#00205b", color: 'white', marginRight: '10px', marginTop: '10px'}} onClick={handleOpenMoreSpeech}>
+    <Button variant="contained" size='small' style= {{backgroundColor: "#003b71", color: 'white', marginRight: '10px', marginTop: '10px'}} onClick={handleOpenMoreSpeech}>
 more info +
 </Button>
 
@@ -406,8 +412,8 @@ more info +
             </DialogActions>
           </Dialog>
 
-<Button variant="contained" size='small' style= {{backgroundColor: "#00205b", color: 'white', marginLeft: '65px', marginTop: '10px'}} onClick={handleOpenExplainSpeech}>
-Explain
+<Button variant="contained" size='small' style= {{backgroundColor: "#003b71", color: 'white', marginLeft: '65px', marginTop: '10px'}} onClick={handleOpenExplainSpeech}>
+explain
 </Button>
 
         <Dialog
@@ -435,9 +441,9 @@ Explain
                                     <h2>
                                 DISTRIBUTION OF SCORES
                             </h2>
-                            <p1>
-                            Here is the cumulative score of your facial tasks. 
-                        </p1>
+                        
+
+                        <img width='400' height='120' src={shap}/>
 
                                 </div>
             
