@@ -17,17 +17,17 @@ class results_buffers extends Component {
         return (
             <div style = {{display: 'flex', flexDirection: 'column', backgroundColor: 'white', height:'100vh'}}>
                 <div style = {{textAlign: 'center'}}>
-                <h1 style = {{color: 'gray'}}>YOUR RESULTS ARE LOADING PAGE</h1></div>
+                <h1 style = {{color: 'gray'}}>YOUR RESULTS ARE LOADING</h1></div>
                 <Lottie 
                     options = {defaultOptions}
                     height = {400}
                     width = {400} 
                     />
                     
-                <Button style = {{color: 'gray', component:{Link}, to: "/results", fontSize: '3vh'}}>
+                {/* <Button style = {{color: 'gray', component:{Link}, to: "/results", fontSize: '3vh'}}>
     To Results
-  </Button><div>
-            </div>
+  </Button> */}
+
             </div>
         )
     }
