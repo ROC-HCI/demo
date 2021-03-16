@@ -12,8 +12,6 @@ function Feedback() {
     const [inference, setInference] = useState();
     const [inference1, setInference1] = useState();
     const [inference2, setInference2] = useState();
-    const [inference3, setInference3] = useState();
-    const [inference4, setInference4] = useState();
     const [display, setDisplay] = useState(false);
     const [displayInference, setDisplayInference] = useState(false);
 
@@ -42,14 +40,15 @@ function Feedback() {
     const post1URL = audioURL;
     const post2URL = inferenceMimicURL;
     const post3URL = videoURL;
+    const post4URL = inferenceAudioURL;
 
     useEffect(() => {
         getFeedback();
     }, []);
 
     function getFeedback() {
-        var data = JSON.stringify({"uri":videoLocation,"use_fast":true});
-        console.log("Sending for Feedback ...");
+        var face_data = JSON.stringify({"uri":videoLocation.slice(0, 3),"use_fast":true});
+        console.log("Sending Video for Feedback ...");
         
         // POST request using axios inside useEffect React hook
         const videoForFeedback = {
@@ -58,7 +57,7 @@ function Feedback() {
             headers: { 
                 'Content-Type': 'application/json'
             },
-            data : data
+            data : face_data
             
         };
 
@@ -69,7 +68,6 @@ function Feedback() {
                 setFeature1(response.data.features['1']);
                 setFeature2(response.data.features['2']);
                 setFeature3(response.data.features['3']);
-                setFeature4(response.data.features['4']);
                 setDisplay(true);
                 console.log(response.data);
                 console.log("SUCCESS");
@@ -77,51 +75,71 @@ function Feedback() {
             .catch((error) => {
                 console.error("There was an error in 1st post!", error);
             });
+
+
+        var audio_data = JSON.stringify({"uri":videoLocation.slice(3,4),"use_fast":true});
+        console.log("Sending Audio for Feedback ...");
+        
+        // POST request using axios inside useEffect React hook
+        const audioForFeedback = {
+            method: 'post',
+            url: 'https://audio-pipeline-bsniz3romq-ue.a.run.app/fox',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            data : audio_data
+            
+        };
+        axios(audioForFeedback)
+            .then((response) => {
+                console.log("SUCCESS AUDIO");
+                console.log(response.data.features);
+                //setFeatures(response.data.features); //TODO: Object is not a react child error
+                setFeature4(response.data.features);
+                setDisplay(true);
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.error("There was an error in 1st post!", error);
+            });
     }
 
     function getInference() {
-        console.log("Sending  for Inference 1...");
-        console.log(feature1);
+        console.log("Sending  for Inference Video...");
+        const mimic_features = {"features" : [{"smile" : feature1, "disgust": feature2, "surprise": feature3}]};
+        console.log(mimic_features);
         axios
-            .post(post2URL, feature1)
+            .post(post2URL, mimic_features)
             .then((response) => {
                 console.log(response.data);
                 setInference1(response.data);
-                setDisplayInference(true);
+                setDisplayInference(false);
             })
             .catch((error) => {
                 console.error("There was an error in 2nd post !", error);
             });
-            console.log("Sending  for Inference 2...");
-            axios
-            .post(post2URL, feature2)
+
+            /* let audio = {feature4["4.wav"]};
+            console.log(typeof audio);
+            Object.keys(audio).forEach(function(key) {
+                  if (key.startsWith('mfcc')) {
+                    delete audio[key];
+                  }
+                });
+                console.log(audio); */
+            
+            console.log("Sending  for Inference Audio...");
+            const audio = feature4["4.wav"];
+            var a = [];
+            a.push(audio);
+            const audio_features = {"features" : a};
+            console.log({"features" : a});
+        axios
+            .post(post4URL, audio_features)
             .then((response) => {
                 console.log(response.data);
                 setInference2(response.data);
-                setDisplayInference(true);
-            })
-            .catch((error) => {
-                console.error("There was an error in 2nd post !", error);
-            });
-            console.log("Sending  for Inference 3...");
-
-            axios
-            .post(post2URL, feature3)
-            .then((response) => {
-                console.log(response.data);
-                setInference3(response.data);
-                setDisplayInference(true);
-            })
-            .catch((error) => {
-                console.error("There was an error in 2nd post !", error);
-            });
-            console.log("Sending  for Inference 4...");
-            axios
-            .post(inferenceAudioURL, feature4)
-            .then((response) => {
-                console.log(response.data);
-                setInference4(response.data);
-                setDisplayInference(true);
+                setDisplayInference(false);
             })
             .catch((error) => {
                 console.error("There was an error in 2nd post !", error);
@@ -129,11 +147,11 @@ function Feedback() {
     }
 
     if (display) {
-        var allFeatures;
-        for (var key in feature1) {
+        var allFeatures = [];
+        for (var key in feature4) {
             // console.log("Key: " + key);
-            console.log("Feature: " + feature1[key]);
-            allFeatures = feature1[key];
+            console.log("Feature: " + feature4[key]);
+            allFeatures = feature4[key];
         }
 
         feedback = (
