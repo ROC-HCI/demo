@@ -37,10 +37,10 @@ class home extends Component {
                     <br></br>
                     <div style = {{display: 'flex', flexDirection: 'row'}}>
                     <div style = {{display: 'flex', flexDirection: 'column'}}>
-                    <button id="startStudy"
-                        className="btn btn-circle btn-xl" >
+                    <Button id="startStudy"
+                        className="btn btn-circle btn-xl" component={Link} to="/task_tutorial">
                         Start Study
-                  </button>
+                  </Button>
                     <br />
                     <br />
                     <h4 style = {{color: 'white'}}>
