@@ -9,7 +9,7 @@ import load from '../lotties/loading';
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogActions from '@material-ui/core/DialogActions'
-import {PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis} from 'recharts'
+import {PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, LineChart, Line, ReferenceLine, Label} from 'recharts'
 
 function Feedback() {
     const [features, setFeatures] = useState();
@@ -197,6 +197,36 @@ function Feedback() {
 
 
     if(showFeedback) {
+      const data = [
+        {
+          uv: 0,
+          pv: 0,
+        },
+        {
+          uv: 20,
+          pv: 5,
+        },
+        {
+          uv: 30,
+          pv: 40,
+        },
+        {
+          uv: 50,
+          pv: 60,
+        },
+        {
+          uv: 60,
+          pv: 75,
+        },
+        {
+          uv: 80,
+          pv: 30,
+        },
+        {
+          uv: 100,
+          pv: 0,
+        },
+      ];
         let prediction = inference2.prediction[0];
         let confidence = inference2.confidence[0][0] * 100;
         let shap = inference2.shap[0];
@@ -268,7 +298,7 @@ function Feedback() {
                 >
                         <h2>OVERALL </h2>
                         <p1>
-                            {prediction === 0 ? "Initial analyzes show that you DO NOT have Parkinson's Disease. Please keep in mind this is not an official medical Diagnosis" 
+                            {prediction === 0 ? "Initial analysis show that you DO NOT have Parkinson's Disease. Please keep in mind this is not an official medical Diagnosis" 
                              : "Initial analyzes show that you may have Parkinson's Disease. Please keep in mind this is not an official medical Diagnosis. We reccomend you seek professional opinion"    
                             }
                         </p1>
@@ -441,9 +471,14 @@ explain
                                     <h2>
                                 DISTRIBUTION OF SCORES
                             </h2>
-                        
-
-                        <img width='400' height='120' src={shap}/>
+                          <LineChart width={400} height={120} data={data}>
+                            <XAxis dataKey="uv" type="number"/>
+                            <ReferenceLine x={90} stroke="red" strokeDasharray="3 3">
+                              <Label value="You" position="insideRight"/>
+                            </ReferenceLine>
+                            <Line type="monotone" dataKey="pv" strokeWidth={2}/>
+                            
+                          </LineChart>
 
                                 </div>
             
