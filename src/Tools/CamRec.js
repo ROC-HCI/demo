@@ -130,15 +130,14 @@ function CamRec(props) {
                 (error) => {
                     //print error
                 },
-                // () => {
-                //     const url = new URL(
-                //         storageRef.child("/test" + fileObject.name)
-                //     );
+                () => {
+                    const url = new URL(
+                        storageRef.child("/test" + fileObject.name)
+                    );
 
                 //     const currentVideoLocation = url.toString();
-
-                //     // setVideoLocation([...'gs://..../test/1.webm', 'gs://..../test/2.webm', 'gs://..../test/3.webm', 'gs://..../test/4.webm']);
-                // }
+                // setVideoLocation([...'gs://..../test/1.webm', 'gs://..../test/2.webm', 'gs://..../test/3.webm', 'gs://..../test/4.webm']);
+                }
             );
         });
 
@@ -171,7 +170,7 @@ function CamRec(props) {
                         pathname: "/results_buffer",
                         state: {
                             src: "from CamRec page",
-                            // url: videoLocation,
+                            url: videoLocation,
                         },
                     }}
                 >

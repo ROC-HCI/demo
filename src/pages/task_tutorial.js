@@ -15,7 +15,6 @@ function Task_tutorial(props) {
         Player = <div className = "video"><ReactPlayer className="react-player" url="https://youtu.be/uRjPKH_SgAM" /></div>;
     } else if (count == 2) {
         Player = <ReactPlayer url="https://youtu.be/kL757TueRVE" />; 
-        // Quick brown fox
     } else if (count == 3) {
         Player = <ReactPlayer url="https://youtu.be/xjsbZp3DrlQ" />;
     } else {

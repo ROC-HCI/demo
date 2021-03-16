@@ -10,7 +10,8 @@ function Feedback() {
     const [displayInference, setDisplayInference] = useState(false);
 
     let location = useLocation();
-    let videoLocation = [...'gs://..../test/1.webm', 'gs://..../test/2.webm', 'gs://..../test/3.webm', 'gs://..../test/4.webm'];
+    let videoLocation = ['gs://park3-a3a67.appspot.com/test/1.webm', 'gs://park3-a3a67.appspot.com/test/2.webm', 'gs://park3-a3a67.appspot.com/test/3.webm', 'gs://park3-a3a67.appspot.com/test/4.webm'];
+    let videoTest = ['gs://park3-a3a67.appspot.com/test/3.webm']
     var feedback = (
         <Container className="my-4">
             <h4>Waiting for Feedback ...</h4>
@@ -25,28 +26,37 @@ function Feedback() {
     );
 
     const audioURL = "https://audio-pipeline-bsniz3romq-ue.a.run.app/fox";
+    const videoURL = "https://image-pipeline-bsniz3romq-ue.a.run.app"
     const inferenceURL = "https://inference-bsniz3romq-ue.a.run.app/mimic";
     const plotURL = "https://inference-bsniz3romq-ue.a.run.app/plot";
     const proxyURL = "https://cors-anywhere.herokuapp.com/";
     const post1URL = audioURL;
     const post2URL = inferenceURL;
+    const post3URL = videoURL;
 
     useEffect(() => {
         getFeedback();
     }, []);
 
     function getFeedback() {
+        var data = JSON.stringify({"uri":videoLocation,"use_fast":true});
         console.log("Sending for Feedback ...");
+        
         // POST request using axios inside useEffect React hook
         const videoForFeedback = {
-            uri: [videoLocation],
+            method: 'post',
+            url: 'https://image-pipeline-bsniz3romq-ue.a.run.app',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            data : data
+            
         };
 
-        axios
-            .post(post1URL, videoForFeedback)
+        axios(videoForFeedback)
             .then((response) => {
-                console.log(response.data.features);
-                setFeatures(response.data.features);
+                // console.log(response.data.features);
+                setFeatures(response.data.features); //TODO: Object is not a react child error
                 setDisplay(true);
             })
             .catch((error) => {
@@ -71,7 +81,8 @@ function Feedback() {
     if (display) {
         var allFeatures;
         for (var key in features) {
-            console.log("Key: " + key);
+            // console.log("Key: " + key);
+            console.log("Feature: " + features[key]);
             allFeatures = features[key];
         }
 
