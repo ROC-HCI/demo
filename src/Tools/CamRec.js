@@ -167,7 +167,7 @@ function CamRec(props) {
             <Button className="m-2" color="warning">
                 <NavLink
                     to={{
-                        pathname: "/results_buffer",
+                        pathname: "/feedback",
                         state: {
                             src: "from CamRec page",
                             url: videoLocation,

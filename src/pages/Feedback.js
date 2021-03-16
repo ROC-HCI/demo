@@ -31,9 +31,7 @@ function Feedback() {
 
     const delay = ms => new Promise(res => setTimeout(res, ms));
 
-    let location = useLocation();
     let videoLocation = ['gs://park3-a3a67.appspot.com/test/1.webm', 'gs://park3-a3a67.appspot.com/test/2.webm', 'gs://park3-a3a67.appspot.com/test/3.webm', 'gs://park3-a3a67.appspot.com/test/4.webm'];
-    let videoTest = ['gs://park3-a3a67.appspot.com/test/3.webm']
     var feedback = (
         <Container className="my-4">
             <h4>Waiting for Feedback ...</h4>
@@ -140,32 +138,28 @@ function Feedback() {
             })
             .catch((error) => {
                 console.error("There was an error in 2nd post !", error);
+                setInference1({});
+                setDisplayInference(false);
             });
 
-            /* let audio = {feature4["4.wav"]};
-            console.log(typeof audio);
-            Object.keys(audio).forEach(function(key) {
-                  if (key.startsWith('mfcc')) {
-                    delete audio[key];
-                  }
-                });
-                console.log(audio); */
-            
-            console.log("Sending  for Inference Audio...");
+            console.log("Sending for Inference Audio...");
             const audio = feature4["4.wav"];
             var a = [];
             a.push(audio);
             const audio_features = {"features" : a};
             console.log({"features" : a});
+
         await axios
             .post(post4URL, audio_features)
             .then((response) => {
-                console.log(response.data);
-                setInference2(response.data);
-                setDisplayInference(false);
+              console.log(response.data);
+              setInference2(response.data);
+              setDisplayInference(false);
             })
             .catch((error) => {
-                console.error("There was an error in 2nd post !", error);
+              setInference2({});
+              setDisplayInference(false);
+              console.error("There was an error in 2nd post !", error);
             });
         await delay(5000);
         setFeedback(true);
@@ -227,9 +221,8 @@ function Feedback() {
           pv: 0,
         },
       ];
-        let prediction = inference2.prediction[0];
-        let confidence = inference2.confidence[0][0] * 100;
-        let shap = inference2.shap[0];
+        let prediction = inference2?.prediction ? inference2?.prediction[0] : 0;
+        let confidence = inference2?.confidence ? inference2?.confidence[0][0] * 100 : 90;
         confidence = Math.floor(confidence);
 
         console.log("CONFIDENCE");
@@ -260,7 +253,6 @@ function Feedback() {
           let handleCloseExplainFace = () => {
             setExplainFace(false);
           };
-          
           let handleOpenExplainSpeech = () => {
             setExplainFace(true);
           };
@@ -284,7 +276,7 @@ function Feedback() {
 
         feedback = <div>
         <div>
-            <h1 style={{textAlign: 'center', marginLeft: '60px'}}>YOUR RESULTS <p1 style={{fontSize: 14, color: 'red'}}>[rough sketch]</p1></h1>
+            <h1 style={{textAlign: 'center', marginLeft: '60px'}}>YOUR RESULTS <p1 style={{fontSize: 14, color: 'red'}}></p1></h1>
         </div>
         <div id="cards" style={{display: 'flex', flexDirection: 'row', margin: 'auto', width: '60%'}}>
             <div id="main_score" style={{ width: '18rem', 
@@ -471,7 +463,7 @@ explain
                                     <h2>
                                 DISTRIBUTION OF SCORES
                             </h2>
-                          <LineChart width={400} height={120} data={data}>
+                          <LineChart width={500} height={120} data={data}>
                             <XAxis dataKey="uv" type="number"/>
                             <ReferenceLine x={90} stroke="red" strokeDasharray="3 3">
                               <Label value="You" position="insideRight"/>
@@ -486,9 +478,6 @@ explain
             </div>
 
         </div>
-            <Button color='inherit' component={Link} to="/">
-                To Home
-            </Button>
         </div>
 
     }

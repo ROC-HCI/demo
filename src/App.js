@@ -17,7 +17,6 @@ function App() {
         <Switch>
           <Route exact path="/" component={home} />
           <Route exact path="/results" component={results} />
-          <Route exact path="/results_buffer" component={results_buffer} />
           <Route exact path="/task_tutorial" component={task_tutorial} />
           <Route exact path="/task_record" component={task_record} />
           <Route exact path="/task_finish" component={task_finish} />
