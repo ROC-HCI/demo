@@ -2,17 +2,18 @@ import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import './App.css';
 
-import home from './pages/home';
+import home from './pages/Home';
 import results from './pages/results';
-import results_buffer from './pages/results_buffer';
 import task_tutorial from './pages/task_tutorial';
 import task_record from './pages/task_record';
 import task_finish from './pages/task_finish';
 import Feedback from './pages/Feedback';
+import { Box, Container, CssBaseline } from '@material-ui/core';
 
 function App() {
   return (
-    <div className="App">
+    <Box paddingX={8}>
+      <CssBaseline/>
       <Router>
         <Switch>
           <Route exact path="/" component={home} />
@@ -23,7 +24,7 @@ function App() {
           <Route exact path="/feedback" component={Feedback} />
         </Switch>
       </Router>
-    </div>
+    </Box>
   );
 }
 

@@ -1,17 +1,61 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { Button, Spinner, Container, Row, Col } from "reactstrap";
+import { Box, Button, Grid, Card, CardContent, CardHeader, makeStyles, Typography, CircularProgress, LinearProgress, useTheme, Fab } from "@material-ui/core";
 import axios from "axios";
-import ButtonM from '@material-ui/core/Button'
-import Link from 'react-router-dom/Link'
 import Lottie from 'react-lottie'
-import load from '../lotties/loading';
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import DialogActions from '@material-ui/core/DialogActions'
-import {PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, LineChart, Line, ReferenceLine, Label} from 'recharts'
+import { Area, AreaChart, XAxis,  ReferenceLine, ResponsiveContainer, Label} from 'recharts'
+import speech from './../lotties/speech.json';
+import face from './../lotties/face.json';
+import spinner from './../lotties/loading.json';
 
-function Feedback() {
+const useStyle = makeStyles(theme => ({
+  panel: {
+      height: '100vh'
+  },
+  title: {
+      fontWeight: 600
+  },
+  media: {
+      height: '100%',
+      width: '100%'
+  }
+}));
+
+const CircularProgressWithLabel = (props) => {
+  return (
+    <Box position="relative" display="inline-flex" justifyContent="center">
+      <CircularProgress variant="determinate" {...props} />
+      <Box
+        top={0}
+        left={0}
+        bottom={0}
+        right={0}
+        position="absolute"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Typography variant="h2">{props.label}%</Typography>
+      </Box>
+    </Box>
+  );
+}
+
+export const Panel = (props) => {
+  const classes = useStyle();
+  return (
+      <Grid 
+          item container 
+          className={classes.panel} 
+          xs={props.xs} spacing={2} 
+          justify={props.justify ?? "center"} 
+          alignContent={props.alignContent ?? "center"}
+      >
+          {props.children}
+      </Grid>
+  );
+}
+
+const Feedback = () => {
     const [features, setFeatures] = useState();
     const [feature1, setFeature1] = useState();
     const [feature2, setFeature2] = useState();
@@ -24,26 +68,13 @@ function Feedback() {
     const [displayInference, setDisplayInference] = useState(false);
     const [loading, setLoading] = useState(true);
     const [showFeedback, setFeedback] = useState(false);
-    const [moreFace, setMoreFace] = useState(false);
-    const [moreSpeech, setMoreSpeech] = useState(false);
-    const [explainFace, setExplainFace] = useState(false);
-    const [explainSpeech, setExplainSpeech] = useState(false);
 
     const delay = ms => new Promise(res => setTimeout(res, ms));
+    const classes = useStyle();
+    const theme = useTheme();
+    const { primary, secondary, text } = theme.palette;
 
-    let videoLocation = ['gs://park3-a3a67.appspot.com/test/1.webm', 'gs://park3-a3a67.appspot.com/test/2.webm', 'gs://park3-a3a67.appspot.com/test/3.webm', 'gs://park3-a3a67.appspot.com/test/4.webm'];
-    var feedback = (
-        <Container className="my-4">
-            <h4>Waiting for Feedback ...</h4>
-
-            <Spinner
-                className="mx-auto my-4"
-                style={{ width: "10rem", height: "10rem" }}
-                color="warning"
-                type="grow"
-            />
-        </Container>
-    );
+    const videoLocation = ['gs://park3-a3a67.appspot.com/test/1.webm', 'gs://park3-a3a67.appspot.com/test/2.webm', 'gs://park3-a3a67.appspot.com/test/3.webm', 'gs://park3-a3a67.appspot.com/test/4.webm'];
 
     const audioURL = "https://audio-pipeline-bsniz3romq-ue.a.run.app/fox";
     const videoURL = "https://image-pipeline-bsniz3romq-ue.a.run.app"
@@ -167,326 +198,207 @@ function Feedback() {
     }
 
 
-    if(loading){
+    const renderLoading = () => {
+      let animationData = spinner;
+      let loaderText = "Processing data...";
+        if(!(feature1 == null || feature2 == null || feature3 == null)) {
+          animationData = face;
+          loaderText = "Extracting facial features...";
+        }
+        if(feature4 !== null) {
+          animationData = speech;
+          loaderText = "Extracting speech features...";
+        }
 
-        const defaultOptions = {
-            loop: true,
-            autoplay: true,
-            animationData: load,
-            rendererSettings: {
-                preserveAspectRation: "xMidYMid slice"
-        }};
-
-        feedback = (<div style = {{display: 'flex', flexDirection: 'column', backgroundColor: 'white', height:'100vh'}}>
-        <div style = {{textAlign: 'center'}}>
-        <h1 style = {{color: 'black'}}>YOUR RESULTS ARE LOADING</h1></div>
-        <Lottie 
-            options = {defaultOptions}
-            height = {400}
-            width = {400} 
-            style = {{fill: 'red', stroke: 'black'}}
-            />
-        </div>);
+        return (
+          <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+            
+            <Lottie height={400} width={400} options={{animationData}}/>
+            <Box>
+              <LinearProgress color="primary"/>
+              <Box m={1}/>
+              <Typography variant="overline">{loaderText}</Typography>
+            </Box>
+          </Box>
+        );
     }
-
-
-    if(showFeedback) {
-      const data = [
+        
+    const renderFeedback = () => {
+      
+      const speechDistribution = [
         {
           uv: 0,
-          pv: 0,
+          pv: 15,
         },
         {
           uv: 20,
-          pv: 5,
-        },
-        {
-          uv: 30,
           pv: 40,
         },
         {
-          uv: 50,
+          uv: 30,
           pv: 60,
         },
         {
-          uv: 60,
-          pv: 75,
+          uv: 50,
+          pv: 40,
         },
         {
-          uv: 80,
+          uv: 60,
           pv: 30,
         },
         {
+          uv: 80,
+          pv: 20,
+        },
+        {
           uv: 100,
-          pv: 0,
+          pv: 5,
         },
       ];
-        let prediction = inference2?.prediction ? inference2?.prediction[0] : 0;
-        let confidence = inference2?.confidence ? inference2?.confidence[0][0] * 100 : 90;
-        confidence = Math.floor(confidence);
-
-        console.log("CONFIDENCE");
-        console.log(confidence);
-        console.log("INFERNCE 1");
-        console.log(inference1);
-        console.log("INFERNCE 2");
-        console.log(inference2);
-
-
-        let handleOpenMoreFace = () => {
-            setMoreFace(true);
-          };
-          let handleCloseMoreFace = () => {
-            setMoreFace(false);
-          };
-          
-          let handleOpenMoreSpeech = () => {
-            setMoreSpeech(true);
-          };
-          let handleCloseMoreSpeech = () => {
-            setMoreSpeech(false);
-          };
-    
-          let handleOpenExplainFace = () => {
-            setExplainFace(true);
-          };
-          let handleCloseExplainFace = () => {
-            setExplainFace(false);
-          };
-          let handleOpenExplainSpeech = () => {
-            setExplainFace(true);
-          };
-          let handleCloseExplainSpeech = () => {
-            setExplainSpeech(false);
-          };
+      const facialDistribution = [
+        {
+          uv: 0,
+          pv: 15,
+        },
+        {
+          uv: 20,
+          pv: 40,
+        },
+        {
+          uv: 30,
+          pv: 60,
+        },
+        {
+          uv: 50,
+          pv: 30,
+        },
+        {
+          uv: 60,
+          pv: 25,
+        },
+        {
+          uv: 80,
+          pv: 20,
+        },
+        {
+          uv: 100,
+          pv: 10,
+        },
+      ];
         
-          const COLORS = ['white','#003b71'];
-          const face_data = [{"name":"face","value":confidence-8}]
-          const speech_data = [{"name":"speech","value":confidence}]
-          const overall_data = [
-            {
-              "name": "Group A",
-              "value": 100-confidence,
-            },
-            {
-                "name": "Group B",
-                "value": confidence,
-            },
-          ];
+        let facialPrediction = inference1?.prediction ? inference1?.prediction[0] : 0;
+        let facialConfidence = facialPrediction === 0 ? 10 : 90;
+        facialConfidence = Math.floor(facialPrediction + Math.random() * 10)
+        let speechPrediction = inference2?.prediction ? inference2?.prediction[0] : 0;
+        let speechConfidence = inference2?.confidence ? Math.floor(inference2?.confidence[0][1] * 100) : 10;
+        let overall = Math.floor((speechConfidence + facialConfidence) / 2);
+        let overallPrediction = overall >= 50 ? 1 : 0;
+        
+        const predictionText = (prediction) => {
+          if (prediction === 0) {
+            return "are NOT likely to have Parkinsons"
+          } else {
+            return "show symptoms of Parkinsons"
+          }
+        }
 
-        feedback = <div>
-        <div>
-            <h1 style={{textAlign: 'center', marginLeft: '60px'}}>YOUR RESULTS <p1 style={{fontSize: 14, color: 'red'}}></p1></h1>
-        </div>
-        <div id="cards" style={{display: 'flex', flexDirection: 'row', margin: 'auto', width: '60%'}}>
-            <div id="main_score" style={{ width: '18rem', 
-                                height: '75vh',
-                                border: '1px solid', 
-                                padding: '10px',
-                                marginRight: '10px',
-                                marginTop: '10px',
-                                marginBottom: '10px',
-                                boxShadow: '5px 10px midnightblue'}} 
-                >
-                        <h2>OVERALL </h2>
-                        <p1>
-                            {prediction === 0 ? "Initial analysis show that you DO NOT have Parkinson's Disease. Please keep in mind this is not an official medical Diagnosis" 
-                             : "Initial analyzes show that you may have Parkinson's Disease. Please keep in mind this is not an official medical Diagnosis. We reccomend you seek professional opinion"    
-                            }
-                        </p1>
-                        <PieChart width={250} height={250}>
-                        <text style={{fontSize: '2rem',
-                                      fontFamily: 'Arial',
-                                    }} 
-                            x={125} y={125} 
-                            textAnchor="middle" 
-                            dominantBaseline="middle" 
-                            scaleToFit='true'>
-                            {String(confidence)+"/100"}
-                        </text>
-                        <Pie
-                            data={overall_data}
-                            innerRadius={60}
-                            outerRadius={80}
-                            fill="#8884d8"
-                            dataKey="value"
-                        >
-                            {overall_data.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                        </Pie>
-                        </PieChart>
-            </div>
-            <div id="alt_scores" style={{display: 'flex', flexDirection: 'column'}}>
-                <div id="task_scores" style={{display: 'flex', flexDirection: 'row'}}>
-                    <div id="face_score" style={{ width: '18rem', 
-                                height: '40vh',
-                                border: '1px solid', 
-                                padding: '10px',
-                                margin: '10px',
-                                boxShadow: '5px 10px midnightblue'}} >
-                            <h2>
-                                FACE
-                            </h2>
-                            <p1>
-                            Here is the cumulative score of your facial tasks. 
-                        </p1>
-    <BarChart 
-        data={face_data}
-        layout="vertical"
-        margin={{ top: 0, right: 50, left: 0, bottom: 0 }}
-        width={300} height={50}
-        style={{marginTop: '20px', marginBottom: '20px'}}
-        >
-        <XAxis type="number" domain={[0, 5]} hide/>
-        <YAxis type="category" width={15} dataKey="value" orientation="right" axisLine={false} tickLine={false} 
-            style={{fontSize: '1.5rem',
-                    fontFamily: 'Arial',
-                }} tick={{fill: 'black'}}
-        />
-        <Bar 
-            dataKey="value" 
-            fill="#003b71"
-        /> 
-    </BarChart>
-    <Button variant="contained" size='small' style= {{backgroundColor: "#003b71", color: 'white', marginRight: '10px', marginTop: '10px'}} onClick={handleOpenMoreFace}>
-more info +
-</Button>
 
-    <Dialog
-            open={moreFace}
-            onClose={handleCloseMoreFace}
-            fullWidth
-            maxWidth="sm"
-          >
-            <DialogTitle>
-              Your Score in Relation to Others
-            </DialogTitle>
-            <DialogActions>
-              <p1>this is where you'll find an relative diagnosis</p1>
-            </DialogActions>
-          </Dialog>
 
-<Button variant="contained" size='small' style= {{backgroundColor: "#003b71", color: 'white', marginLeft: '65px', marginTop: '10px'}} onClick={handleOpenExplainFace}>
-explain
-</Button>
-
-        <Dialog
-            open={explainFace}
-            onClose={handleCloseExplainFace}
-            fullWidth
-            maxWidth="sm"
-          >
-            <DialogTitle>
-              Your Facial Task Results Explained
-            </DialogTitle>
-            <DialogActions>
-              <p1>this is where you'll find an explainable diagnosis</p1>
-            </DialogActions>
-          </Dialog>
-                                
-        </div>
-        <div id="speech_score" style={{ width: '18rem', 
-                                height: '40vh',
-                                border: '1px solid', 
-                                padding: '10px',
-                                margin: '10px',
-                                boxShadow: '5px 10px midnightblue'}} >
-                            <h2>
-                                SPEECH
-                            </h2>
-                            <p1>
-                            Here is the cumulative score of your speech tasks. 
-                        </p1>
-    <BarChart 
-        data={speech_data}
-        layout="vertical"
-        margin={{ top: 0, right: 50, left: 0, bottom: 0 }}
-        width={300} height={50}
-        style={{marginTop: '20px', marginBottom: '20px'}}
-        >
-        <XAxis type="number" domain={[0, 5]} hide/>
-        <YAxis type="category" width={15} dataKey="value" orientation="right" axisLine={false} tickLine={false} 
-            style={{fontSize: '1.5rem',
-                    fontFamily: 'Arial',
-                }} tick={{fill: 'black'}}
-        />
-        <Bar 
-            dataKey="value" 
-            fill="#003b71"
-        /> 
-    </BarChart>
-    <Button variant="contained" size='small' style= {{backgroundColor: "#003b71", color: 'white', marginRight: '10px', marginTop: '10px'}} onClick={handleOpenMoreSpeech}>
-more info +
-</Button>
-
-    <Dialog
-            open={moreSpeech}
-            onClose={handleCloseMoreSpeech}
-            fullWidth
-            maxWidth="sm"
-          >
-            <DialogTitle>
-              Your Score in Relation to Others
-            </DialogTitle>
-            <DialogActions>
-              <p1>this is where you'll find an relative diagnosis</p1>
-            </DialogActions>
-          </Dialog>
-
-<Button variant="contained" size='small' style= {{backgroundColor: "#003b71", color: 'white', marginLeft: '65px', marginTop: '10px'}} onClick={handleOpenExplainSpeech}>
-explain
-</Button>
-
-        <Dialog
-            open={explainSpeech}
-            onClose={handleCloseExplainSpeech}
-            fullWidth
-            maxWidth="sm"
-          >
-            <DialogTitle>
-              Your Speech Task Results Explained
-            </DialogTitle>
-            <DialogActions>
-              <p1>this is where you'll find an explainable diagnosis</p1>
-            </DialogActions>
-          </Dialog>
-                                
-        </div>
-        </div>
-                <div id="score_distributions" style={{ width: '37rem', 
-                                height: '30vh',
-                                border: '1px solid', 
-                                padding: '10px',
-                                margin: '15px',
-                                boxShadow: '5px 10px midnightblue'}}>
-                                    <h2>
-                                DISTRIBUTION OF SCORES
-                            </h2>
-                          <LineChart width={500} height={120} data={data}>
-                            <XAxis dataKey="uv" type="number"/>
-                            <ReferenceLine x={90} stroke="red" strokeDasharray="3 3">
-                              <Label value="You" position="insideRight"/>
-                            </ReferenceLine>
-                            <Line type="monotone" dataKey="pv" strokeWidth={2}/>
-                            
-                          </LineChart>
-
-                                </div>
-            
-            
-            </div>
-
-        </div>
-        </div>
-
+        return (
+          <Panel xs={12} spacing={2}>
+            <Grid item xs={5} justify="space-around">
+              <Card className={classes.card}>
+                  <CardContent>
+                      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+                          <CircularProgressWithLabel size={200} label={overall} value={overall}/>
+                          <Box m={1} />
+                          <Box px={5}>
+                            <Typography align="center" color="textSecondary">
+                              {
+                              `Overall score suggests that you ${predictionText(overallPrediction)}. 
+                              However, for an accurate diagnosis please consult with a local medical authority.
+                              PARK is a support tool NOT a diagnostic tool.`
+                              }
+                            </Typography>
+                          </Box>
+                          <Box m={3} />
+                          <Button color="primary" variant="contained">Search Nearby Clinic</Button>
+                      </Box>
+                  </CardContent>
+              </Card>
+              <Box m={2}/>
+              <Card className={classes.card}>
+                    <CardHeader 
+                        title={<Typography variant="h5">Speech</Typography>} 
+                        subheader="Speech results" 
+                        avatar={<Lottie height={50} width={50} options={{animationData: speech}}/>}
+                    />
+                    <CardContent>
+                        <Typography variant="h6">{`SCORE | ${speechConfidence}%`}</Typography>
+                        <Typography variant="subtitle2">{`Speech task results show that ${predictionText(facialPrediction)}`}</Typography>
+                        <Box m={1}/>
+                        <LinearProgress className={classes.bar} variant="determinate" value={speechConfidence}/>
+                    </CardContent>
+                </Card>
+                <Box m={2}/>
+                <Card className={classes.card}>
+                    <CardHeader 
+                        title={<Typography variant="h5">Facial</Typography>} 
+                        subheader="Facial mimicry results" 
+                        avatar={<Lottie height={50} width={50} options={{animationData: face}}/>}
+                    />
+                    <CardContent>
+                        <Typography variant="h6">{`SCORE | ${facialConfidence}%`}</Typography>
+                        <Typography variant="subtitle2">{`Facial task results show that ${predictionText(facialPrediction)}`}</Typography>
+                        <Box m={1}/>
+                        <LinearProgress className={classes.bar} variant="determinate" value={facialConfidence}/>
+                    </CardContent>
+                </Card>
+              
+            </Grid>
+            <Grid item xs={7}>
+            <Card className={classes.card}>
+                    <CardHeader title="Comparison | Facial" subheader="PARK Score in Context" />
+                    <CardContent>
+                        <ResponsiveContainer height={300}>
+                            <AreaChart data={facialDistribution}>
+                                <Area type="monotone" dataKey="pv" fill={primary.main}/>
+                                <ReferenceLine x={facialConfidence} stroke="black">
+                                    <Label value="You" position="insideTopRight"/>
+                                </ReferenceLine>
+                                <XAxis type="number" dataKey="uv"/>
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+                <Box m={2}/>
+                <Card className={classes.card}>
+                    <CardHeader title="Comparison | Speech" subheader="PARK Score in Context" />
+                    <CardContent>
+                        <ResponsiveContainer height={300}>
+                            <AreaChart data={speechDistribution}>
+                                <Area type="monotone" dataKey="pv" fill={primary.main}/>
+                                <ReferenceLine x={speechConfidence} stroke="black">
+                                  <Label value="You" position="insideTopRight"/>
+                                </ReferenceLine>
+                                <XAxis type="number" dataKey="uv"/>
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+            </Grid>
+          </Panel>
+        );
     }
 
     return (
-        <div>
-            {feedback}
-        </div>
+      <Grid container spacing={2}>
+        <Panel>
+            {loading? renderLoading() : renderFeedback()}
+        </Panel>
+        </Grid>
     );
+        
 }
 
 export default Feedback;

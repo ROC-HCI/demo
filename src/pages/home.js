@@ -1,64 +1,63 @@
-import React, { Component } from 'react'
-import Button from '@material-ui/core/Button'
+import React, { useState, useEffect, useRef } from 'react'
 import Link from 'react-router-dom/Link'
-import Lottie from 'react-lottie'
+import LandingImage from "./stock.png";
+import { Button, Box, Grid,Typography, AppBar, makeStyles, Fab } from '@material-ui/core'
 import "../home.css";
-import ParkHomepageImage from "./ParkHomepageImage.png"
 
-class home extends Component {
-
-    render() {
-        const StyledButton = {
-            fontSize: '3vh',
-            color: '#0261FF'
-        };
-        return (
-            
-            <div style={{ display: 'flex', backgroundColor: 'white', flexDirection: 'column' }}>
-                <div style={{ flexDirection: 'row' }}>
-                    <h1 style={{ textAlign: 'center', float: 'left', color: '#0261FF', fontSize: '6vh', }} > PARK </h1>
-                    <h2 style={{ textAlign: 'center', float: 'center' }}>
-                    <Button style={{ color: '#0261FF', component: { Link }, to: "/home", fontSize: '3vh'}}>
-                            <b>Home</b>
-                        </Button>
-                        <Button style={{ color: '#0261FF', component: { Link }, to: "/About", fontSize: '3vh' }}>
-                            <b>About</b>
-                        </Button>
-                        <Button style={{ color: '#0261FF', component: { Link }, to: "/FAQ", fontSize: '3vh' }}>
-                            <b>FAQ</b>
-                        </Button>
-                        <Button style={{ color: '#0261FF', component: { Link }, to: "/Contact", fontSize: '3vh' }}>
-                            <b>Contact</b>
-                        </Button>  </h2>
-                        </div>
-                <div style={{ display: 'flex', flexDirection: 'column', height: '90vh', background: 'linear-gradient(to right, #0161FC, #529E36)' }} >
-                    <h3 style ={{ color: 'white', fontSize: '5.5vh'}}> The PARK system enables  <br /> the measurement of  <br /> Parkinson's disease for <br />
-                        <em>anyone, anywhere -</em> <br />- via webcam</h3>
-                    <br></br>
-                    <div style = {{display: 'flex', flexDirection: 'row'}}>
-                    <div style = {{display: 'flex', flexDirection: 'column'}}>
-                    <Button id="startStudy"
-                        className="btn btn-circle btn-xl" component={Link} to="/task_tutorial">
-                        Start Study
-                  </Button>
-                    <br />
-                    <br />
-                    <h4 style = {{color: 'white'}}>
-                        We ask that only those with Parkinson's
-                        complete the study at this time.
-                     </h4>
-                    </div>
-                    <h5 style = {{alignitems: 'right'}}><img className= "photo" src={ParkHomepageImage}></img></h5>
-                </div>
-                </div>
-                <div>
-               
-                </div>
-            </div>
-
-        )
-
+const useStyle = makeStyles(theme => ({
+    panel: {
+        height: '100vh'
+    },
+    title: {
+        fontWeight: 600
+    },
+    media: {
+        height: '100%',
+        width: '100%'
     }
+}));
+
+export const Panel = (props) => {
+    const classes = useStyle();
+    return (
+        <Grid 
+            item container 
+            className={classes.panel} 
+            xs={props.xs} spacing={2} 
+            justify={props.justify ?? "center"} 
+            alignContent={props.alignContent ?? "center"}
+        >
+            {props.children}
+        </Grid>
+    );
 }
 
-export default home
+const Home = (props) => {
+    const classes = useStyle();
+        
+        return (
+            <Grid container spacing={2}>
+                <Panel xs={6}>
+                    <Box m={1}>
+                        <Box mb={5}>
+                            <Typography className={classes.title} color="primary" variant="h1">PARK FRAMEWORK</Typography>
+                            <Box m={1}/>
+                            <Typography variant="h5">
+                                The PARK system enables the measurement of Parkinson's disease for anyone, anywhere - via webcam
+                            </Typography>
+                        </Box>
+                        <Link to="/task_tutorial">
+                        <Fab color="primary" variant="extended">
+                            Start Study
+                        </Fab>
+                        </Link>
+                    </Box>
+                </Panel>
+                <Panel xs={6}>
+                    <img alt="landing page" src={LandingImage}/>
+                </Panel>    
+            </Grid>
+        );
+}
+
+export default Home;

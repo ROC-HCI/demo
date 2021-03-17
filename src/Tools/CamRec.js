@@ -149,13 +149,13 @@ function CamRec(props) {
     if (!started) {
         ControlComponent = (
             <Button className="m-4" color="success" onClick={startRecord}>
-                Start Record
+                START RECORD
             </Button>
         );
     } else {
         ControlComponent = (
             <Button className="m-4" color="danger" onClick={stopRecord}>
-                Stop Record
+                STOP RECORD
             </Button>
         );
     }
@@ -183,7 +183,7 @@ function CamRec(props) {
     return (
         <Container>
             <div className="d-flex align-items-center flex-column">
-                <video ref={myRef} height="auto" width="640" autoPlay muted />
+                <video ref={myRef} height="auto" width="640" autoPlay muted style={{'borderRadius': '1rem'}} />
                 {ControlComponent}
                 {FeedbackComponent}
             </div>

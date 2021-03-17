@@ -1,32 +1,44 @@
 import React, { useState } from "react";
 import ReactPlayer from "react-player";
 import CamRec from "../Tools/CamRec";
-import { Container, Button } from "reactstrap";
+import { Button, Box, Grid, Typography, Container, makeStyles, Fab } from '@material-ui/core'
+
+const useStyle = makeStyles(theme => ({
+    panel: {
+        height: '100vh'
+    },
+    title: {
+        fontWeight: 500
+    },
+    round: {
+        borderRadius: '1rem',
+        overflow: "hidden"
+    },
+    media: {
+        height: '100%',
+        width: '100%'
+    }
+}));
 
 function Task_tutorial(props) {
     const [count, setCount] = useState(1);
     const [complete, setComplete] = useState(false);
     const [buttonName, setButtonName] = useState("Start Task");
-    const taskName = "Task" + count;
+    const classes = useStyle();
+    const taskName = "TASK" + count;
+
     let Player;
     if (complete) {
         Player = <CamRec taskCount={count} />;
-    } else if (count == 1) {
-        Player = <div className = "video"><ReactPlayer className="react-player" url="https://youtu.be/uRjPKH_SgAM" /></div>;
-    } else if (count == 2) {
-        Player = <ReactPlayer url="https://youtu.be/kL757TueRVE" />; 
-    } else if (count == 3) {
-        Player = <ReactPlayer url="https://youtu.be/xjsbZp3DrlQ" />;
+    } else if (count === 1) {
+        Player = <ReactPlayer className={classes.round} url="https://youtu.be/uRjPKH_SgAM" />;
+    } else if (count === 2) {
+        Player = <ReactPlayer className={classes.round} url="https://youtu.be/kL757TueRVE" />; 
+    } else if (count === 3) {
+        Player = <ReactPlayer className={classes.round} url="https://youtu.be/xjsbZp3DrlQ" />;
     } else {
-        Player = <ReactPlayer url="https://youtu.be/eG2vrNFcpRM" />;
+        Player = <ReactPlayer className={classes.round} url="https://youtu.be/eG2vrNFcpRM" />;
     }
-
-// old urls
-// https://youtu.be/YbqR1kH_9YM
-// https://youtu.be/eG2vrNFcpRM
-// https://youtu.be/eGSug9VdR78
-// https://youtu.be/C2GSwTR2Fts
-
     const toggle = () => {
         setComplete(!complete);
         if (complete) {
@@ -38,23 +50,25 @@ function Task_tutorial(props) {
     };
 
     let buttonElement = (
-        <Button className="m-4" onClick={toggle} right>
-            {buttonName}
-        </Button>
+        <Fab color="primary" variant="extended" onClick={toggle}>
+            <Typography>{buttonName}</Typography>
+        </Fab>
     );
 
-    if (count == 4 && complete) {
-        console.log("inside this");
+    if (count === 4 && complete) {
         buttonElement = <> </>;
     }
 
+
+
     return (
-        <Container className="" fluid={true}>
-            <div className="d-flex align-items-center flex-column">
-                <h1 className="m-4">{taskName}</h1>
+        <Container>
+            <Box className={classes.panel} display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                <Box m={1}/>
                 {Player}
+                <Box m={1}/>
                 {buttonElement}
-            </div>
+            </Box>
         </Container>
     );
 }
